@@ -1,75 +1,149 @@
-# This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
-# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
-name: CMake on multiple platforms
+name: Shell
 
 on:
   push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
-
+  schedule:
+    - cron: '15 21 * * *'
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-
     strategy:
-      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
-      fail-fast: false
-
-      # Set up a matrix to run the following 3 configurations:
-      # 1. <Windows, Release, latest MSVC compiler toolchain on the default runner image, default generator>
-      # 2. <Linux, Release, latest GCC compiler toolchain on the default runner image, default generator>
-      # 3. <Linux, Release, latest Clang compiler toolchain on the default runner image, default generator>
-      #
-      # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        build_type: [Release]
-        c_compiler: [gcc, clang, cl]
-        include:
-          - os: windows-latest
-            c_compiler: cl
-            cpp_compiler: cl
-          - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
-          - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-        exclude:
-          - os: windows-latest
-            c_compiler: gcc
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: cl
-
+        os: [macOS-latest]
+      #  node: ['8']
+    env:
+      APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
+      CERT_PASS: ${{ secrets.CERT_PASS }}
+      DEST_DIR: ./build/stremio.app/Contents/MacOS
+      TAG: master
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-    - uses: actions/checkout@v3
+      #- uses: maxim-lobanov/setup-xcode@v1.1
+      #  with:
+      #    xcode-version: '11.5'
 
-    - name: Set reusable strings
-      # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v2
+  
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: ${{ matrix.node }}
 
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
+      - name: Submodules
+        run: git submodule update --init --recursive
 
-    - name: Build
-      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      - name: Prepare environment
+        run: |
+          SHELL_VERSION=$(./dist-utils/common/get-version.sh)
+          DMG_PATH="Stremio $SHELL_VERSION.dmg"
+          node -e 'process.stdout.write("CURRENT_BRANCH="+process.env.GITHUB_REF.replace(/^refs\/(heads|tags)\//, "")+"\n")' >> $GITHUB_ENV
+          echo SHELL_VERSION=$SHELL_VERSION >> $GITHUB_ENV
+          echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
 
-    - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest --build-config ${{ matrix.build_type }}
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          modules: qtwebengine qtwebglplugin
+
+      - name: Dependencies
+        run: |
+          brew update-reset
+          brew update
+          brew install openssl
+          npm -g install appdmg
+
+      - name: Build
+        run: |
+          git clone https://github.com/iina/iina
+          bash ./iina/other/download_libs.sh
+          export MPV_BIN_PATH=$(pwd)/deps
+          ( cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
+          export OPENSSL_BIN_PATH=$(brew --prefix openssl)
+          mkdir build
+          ( cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .. && make --no-print-directory )
+
+      - name: Add binaries
+        run: |
+          cp ./mac/ffmpeg $DEST_DIR/
+          cp ./mac/ffprobe $DEST_DIR/
+          cat ./mac/node > $DEST_DIR/node
+          chmod +w $DEST_DIR/ffmpeg
+          chmod +w $DEST_DIR/ffprobe
+          chmod +wx $DEST_DIR/node
+
+      - name: Deploy
+        run: |
+          macdeployqt ./build/stremio.app -executable=$DEST_DIR/ffmpeg -executable=$DEST_DIR/ffprobe  -executable=$DEST_DIR/node
+
+      - name: Server
+        env:
+          TAG: master 
+        run: |
+          curl $(cat ./server-url.txt) > $DEST_DIR/server.js
+          
+      - name: Fix dependencies
+        run: |
+          cp ./deps/lib/* ./build/stremio.app/Contents/Frameworks
+          cp ./mac/libcrypto.3.dylib ./build/stremio.app/Contents/Frameworks
+
+      - name: Testdrive
+        run: ( $DEST_DIR/stremio & sleep 10 && STREMIO_PID=$! && kill $STREMIO_PID )
+
+      - name: Rename the app
+        run: mv ./build/stremio.app ./Stremio.app
+
+      - name: Setup keychain
+        run: if [ "$DEPLOY" = "true" ]; then source ./mac/keychain_profile; fi
+
+      - name: Sign App
+        run: |
+          if [ "$DEPLOY" = "true" ]; then codesign --deep --force -v -s $APP_IDENTITY --entitlements ./mac/entitlements.plist --options runtime ./Stremio.app; fi
+
+      - name: Notarizing
+        env:
+          NOTARIZATION_PWD: ${{ secrets.NOTARIZATION_PWD }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+        run: |
+          if [ "$DEPLOY" = "true" ]; then ./mac/notarizer.sh Stremio.app "ivo@linvo.com" "$NOTARIZATION_PWD" "$TEAM_ID"; fi
+
+      - name: Pack
+        run: |
+          ditto -c -k --rsrc --keepParent Stremio.app Stremio.app.zip
+          sed -ie 's/"title": "Stremio.*"/"title": "Stremio '$SHELL_VERSION'"/' ./mac/appdmg.json
+          appdmg ./mac/appdmg.json "$DMG_PATH"
+
+      - name: Sign Dmg
+        run: |
+          if [ "$DEPLOY" = "true" ]; then codesign --deep --force -v -s $APP_IDENTITY "$DMG_PATH"; fi
+
+      - name: Store DMG
+        uses: actions/upload-artifact@v1
+        with:
+          name: StremioDMG
+          path: "${{ env.DMG_PATH }}"
+
+      - name: Upload to AWS
+        shell: bash
+        env:
+          AWS_ACCESS_KEY_ID: AKIAJWBFLU34IVITPLHA
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+          AWS_DEFAULT_REGION: eu-west-1
+        run: |
+          pip3 install s3cmd
+           if [ "$DEPLOY" = "true" ]; then s3cmd --acl-public --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --force --region=$AWS_DEFAULT_REGION put "$DMG_PATH" s3://stremio-artifacts/shell-osx/$CURRENT_BRANCH/ ; fi
+
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: Github Action
+          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2020-10-19/1422366829703_48.png
+          SLACK_TITLE: Github Builds - Shell
+          SLACK_CHANNEL: '#installer-ci'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: ${{ !github.event.pull_request }}
