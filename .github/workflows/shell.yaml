@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [self-hosted]
+        os: [macOS-13]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -41,11 +41,11 @@ jobs:
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
 
-    #  - name: Install Qt
-     #   uses: jurplel/install-qt-action@v2
-      #  with:
-       #   version: 5.15.2
-        #  modules: qtwebengine qtwebglplugin
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          modules: qtwebengine qtwebglplugin
 
       - name: Dependencies
         run: |
