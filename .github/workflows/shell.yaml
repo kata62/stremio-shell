@@ -7,7 +7,7 @@ on:
     - cron: '15 21 * * *'
 jobs:
   build:
-    runs-on: ${{ self-hosted }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [self-hosted]
