@@ -104,7 +104,7 @@ jobs:
 
      
       - name: Store DMG
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: StremioDMG
           path: "${{ env.DMG_PATH }}"
