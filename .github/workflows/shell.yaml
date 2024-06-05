@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-12]
+        os: [macOS-latest]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -56,8 +56,10 @@ jobs:
 
       - name: Build
         run: |
-          brew tap iina/homebrew-mpv-iina
-          brew install mpv-iina
+          git clone https://github.com/iina/iina
+          bash ./iina/other/download_libs.sh
+          export MPV_BIN_PATH=$(pwd)/deps
+          ( cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
           export OPENSSL_BIN_PATH=$(brew --prefix openssl)
           mkdir build
           ( cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .. && make --no-print-directory )
