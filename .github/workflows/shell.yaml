@@ -56,7 +56,6 @@ jobs:
 
       - name: Build
         run: |
-        #  git clone https://github.com/iina/iina
           git clone https://github.com/iina/iina.git
           bash ./iina/other/download_libs.sh
           export MPV_BIN_PATH=$(pwd)/deps
