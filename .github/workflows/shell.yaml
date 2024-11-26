@@ -53,7 +53,7 @@ jobs:
           brew update
           brew install openssl
           npm -g install appdmg
-          export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/lib/pkgconfig"
+          export PKG_CONFIG_PATH=$HOMEBREW_PREFIX/lib/pkgconfig
       - name: Build
         run: |
           git clone -b v1.3.5 https://github.com/iina/iina
