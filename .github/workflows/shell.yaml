@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-latest]
+        os: [macOS-13]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -53,8 +53,7 @@ jobs:
           brew update
           brew install openssl
           npm -g install appdmg
-          export PKG_CONFIG_PATH=$HOMEBREW_PREFIX/lib/pkgconfig
-      - name: Build
+       - name: Build
         run: |
           git clone -b v1.3.5 https://github.com/iina/iina
           bash ./iina/other/download_libs.sh
