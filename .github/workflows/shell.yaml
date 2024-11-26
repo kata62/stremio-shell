@@ -52,6 +52,7 @@ jobs:
           brew update-reset
           brew update
           brew install openssl
+          rm -rf /usr/local/Cellar/openssl@3
           npm -g install appdmg
 
       - name: Build
