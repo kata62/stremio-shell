@@ -52,9 +52,8 @@ jobs:
           brew update-reset
           brew update
           brew install openssl
-          rm -rf /usr/local/Cellar/openssl@3
           npm -g install appdmg
-
+          export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/lib/pkgconfig"
       - name: Build
         run: |
           git clone -b v1.3.5 https://github.com/iina/iina
