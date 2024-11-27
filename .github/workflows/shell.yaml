@@ -40,7 +40,12 @@ jobs:
           echo SHELL_VERSION=$SHELL_VERSION >> $GITHUB_ENV
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
-     
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 6.2.8
+          modules: qtwebengine qtwebglplugin  qtpositioning qtwebchannel
+
 
       - name: Dependencies
         run: |
