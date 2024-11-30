@@ -44,6 +44,8 @@ endif()
 
 if(APPLE)
   list(APPEND SOURCES images/stremio.icns)
+  set(QT_DEFAULT_MAJOR_VERSION 6)
+  set(ENV{Qt6_DIR} $ENV{QTDIR})
   set_source_files_properties(images/stremio.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
   set(MPV_LIBRARY_mpv ${CMAKE_CURRENT_SOURCE_DIR}/deps/lib/libmpv.dylib)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,@executable_path/../Frameworks")
