@@ -112,15 +112,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC
-  Qt::Core
-  Qt::Gui
-  Qt::Quick
-  Qt::Network
+  Qt6::Core
+  Qt6::Gui
+  Qt6::Quick
+  Qt6::Network
   Qt::Widgets
-  Qt::WebEngine
-  Qt::WebChannel
-  Qt::DBus
-  Qt::OpenGL
+  Qt6::WebEngine
+  Qt6::WebChannel
+  Qt6::DBus
+  Qt6::OpenGL
   SingleApplication::SingleApplication
   OpenSSL::Crypto
   ${MPV_LIBRARY}
