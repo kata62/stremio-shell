@@ -51,9 +51,9 @@ jobs:
         run: |
           brew update-reset
           brew update
-          brew install openssl
+          #brew install openssl
           npm -g install appdmg
-          rm -rf /usr/local/Cellar/openssl@3
+         
       - name: Build
         run: |
          git clone -b v1.3.5 https://github.com/iina/iina
