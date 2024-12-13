@@ -53,6 +53,7 @@ jobs:
           brew update
           brew install openssl
           npm -g install appdmg
+          brew install pkg-config
       - name: Build
         run: |
          git clone -b v1.3.5 https://github.com/iina/iina
