@@ -55,10 +55,10 @@ jobs:
           npm -g install appdmg
       - name: Build
         run: |
-         git clone https://github.com/iina/iina
+         git clone -b v1.3.5 https://github.com/iina/iina
           bash ./iina/other/download_libs.sh
           export MPV_BIN_PATH=$(pwd)/deps
-          (cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
+          # (cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
           export OPENSSL_BIN_PATH=$(brew --prefix openssl)
           mkdir build
           ( cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_RULE_MESSAGES:BOOL=OFF  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .. && make --no-print-directory )
