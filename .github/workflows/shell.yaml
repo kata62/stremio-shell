@@ -49,9 +49,14 @@ jobs:
 
       - name: Dependencies
         run: |
+          git clone --depth=1 https://github.com/open-quantum-safe/liboqs
+          cmake -S liboqs -B liboqs/build -DBUILD_SHARED_LIBS=ON
+          cmake --build liboqs/build --parallel 8
+          sudo cmake --build liboqs/build --target install
+
           brew update-reset
           brew update
-          #brew install openssl
+          brew install openssl
           npm -g install appdmg
       - name: Build
         run: |
