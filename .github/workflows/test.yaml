@@ -44,7 +44,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.5.2
-          modules: qtwebengine qtwebglview qtpositioning
+          modules: qtwebengine qtwebview qtpositioning
 
 
       - name: Dependencies
