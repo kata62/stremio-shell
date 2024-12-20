@@ -98,7 +98,7 @@ jobs:
           appdmg ./mac/appdmg.json "$DMG_PATH"
      
       - name: Store DMG
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v1
         with:
           name: StremioDMG
           path: "${{ env.DMG_PATH }}"
