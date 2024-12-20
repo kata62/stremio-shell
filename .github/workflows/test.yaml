@@ -1,4 +1,4 @@
-name: test1
+name: Shell
 
 on:
   push:
@@ -22,9 +22,9 @@ jobs:
       #- uses: maxim-lobanov/setup-xcode@v1.1
       #  with:
       #    xcode-version: '11.5'
-     
-      - uses: actions/checkout@v2
-        
+
+      - uses: actions/checkout@v4
+  
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: ${{ matrix.node }}
@@ -40,23 +40,22 @@ jobs:
           echo SHELL_VERSION=$SHELL_VERSION >> $GITHUB_ENV
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
-    #  - name: Install Qt
-     #   uses: jurplel/install-qt-action@v2
-      #  with:
-       #   version: 5.15.2
-        #  modules: qtwebengine qtwebglplugin
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.15.2
+          modules: qtwebengine qtwebglplugin
 
 
       - name: Dependencies
         run: |
-          brew install qt@5
           brew update-reset
           brew update
           brew install openssl
           npm -g install appdmg
       - name: Build
         run: |
-          git clone -b v1.3.5 https://github.com/iina/iina
+         git clone -b v1.3.5 https://github.com/iina/iina
           bash ./iina/other/download_libs.sh
           export MPV_BIN_PATH=$(pwd)/deps
           (cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
@@ -99,7 +98,7 @@ jobs:
           appdmg ./mac/appdmg.json "$DMG_PATH"
      
       - name: Store DMG
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: StremioDMG
           path: "${{ env.DMG_PATH }}"
@@ -108,3 +107,4 @@ jobs:
 
   
         if: ${{ !github.event.pull_request }}
+Update shell.yaml · kata62/stremio-shell@dfb534d
