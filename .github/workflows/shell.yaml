@@ -49,6 +49,9 @@ jobs:
 
       - name: Dependencies
         run: |
+          export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+          export CPATH=/opt/homebrew/include
+          export LIBRARY_PATH=/opt/homebrew/lib
           brew update-reset
           brew update
           brew install openssl
