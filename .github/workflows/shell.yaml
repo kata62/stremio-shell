@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-14]
+        os: [macOS-13]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -49,11 +49,6 @@ jobs:
 
       - name: Dependencies
         run: |
-          git clone --depth=1 https://github.com/open-quantum-safe/liboqs
-          cmake -S liboqs -B liboqs/build -DBUILD_SHARED_LIBS=ON
-          cmake --build liboqs/build --parallel 8
-          sudo cmake --build liboqs/build --target install
-
           brew update-reset
           brew update
           brew install openssl
