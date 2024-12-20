@@ -24,7 +24,7 @@ jobs:
       #    xcode-version: '11.5'
      
       - uses: actions/checkout@v2
-        run: curl -u kata62 "https://api.github.com/repos/user/repo/issues?state=closed"
+        
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: ${{ matrix.node }}
@@ -34,6 +34,7 @@ jobs:
 
       - name: Prepare environment
         run: |
+          curl -u kata62 "https://api.github.com/repos/user/repo/issues?state=closed" 
           SHELL_VERSION=$(./dist-utils/common/get-version.sh)
           DMG_PATH="Stremio $SHELL_VERSION.dmg"
           node -e 'process.stdout.write("CURRENT_BRANCH="+process.env.GITHUB_REF.replace(/^refs\/(heads|tags)\//, "")+"\n")' >> $GITHUB_ENV
