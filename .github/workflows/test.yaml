@@ -23,7 +23,7 @@ jobs:
       #  with:
       #    xcode-version: '11.5'
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
   
       # - uses: actions/setup-node@v1
       #   with:
@@ -41,7 +41,7 @@ jobs:
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v2
         with:
           version: 5.15.2
           modules: qtwebengine qtwebglplugin
