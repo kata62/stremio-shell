@@ -50,7 +50,6 @@ jobs:
       - name: Dependencies
         run: |
           brew install qt@5
-          brew install cmake
           brew update-reset
           brew update
           brew install openssl
