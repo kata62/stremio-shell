@@ -52,6 +52,9 @@ jobs:
           export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
           export CPATH=/opt/homebrew/include
           export LIBRARY_PATH=/opt/homebrew/lib
+          export PATH=/opt/homebrew/opt/llvm/bin:$HOME/bin:$PATH
+          export CXX=clang++
+          export CC=clang
           brew update-reset
           brew update
           brew install openssl
