@@ -102,8 +102,4 @@ jobs:
         with:
           name: StremioDMG
           path: "${{ env.DMG_PATH }}"
-
-      
-
-  
-     #   if: ${{ !github.event.pull_request }}
+          if: ${{ !github.event.pull_request }}
