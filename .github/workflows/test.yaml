@@ -52,8 +52,10 @@ jobs:
           brew update-reset
           brew update
           git clone https://github.com/openssl/openssl.git
+          cd openssl
           perl Configure darwin64-x86_64
           make -j8
+          make install
           npm -g install appdmg
       - name: Build
         run: |
