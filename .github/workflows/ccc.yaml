@@ -13,8 +13,8 @@ jobs:
         os: [macOS-latest]
       #  node: ['8']
     env:
-      APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
-      CERT_PASS: ${{ secrets.CERT_PASS }}
+     # APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
+     # CERT_PASS: ${{ secrets.CERT_PASS }}
       DEST_DIR: ./build/stremio.app/Contents/MacOS
       TAG: master
       
@@ -106,4 +106,4 @@ jobs:
       
 
   
-        if: ${{ !github.event.pull_request }}
+     #   if: ${{ !github.event.pull_request }}
