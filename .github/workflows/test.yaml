@@ -52,6 +52,7 @@ jobs:
         run: |
           brew update-reset
           brew update
+          arch -x86_64 /usr/local/bin/brew install openssl
           npm -g install appdmg
       - name: Build
         run: |
