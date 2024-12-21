@@ -109,4 +109,3 @@ jobs:
 
   
         if: ${{ !github.event.pull_request }}
-Update shell.yaml · kata62/stremio-shell@dfb534d
