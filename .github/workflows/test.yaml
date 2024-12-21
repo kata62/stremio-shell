@@ -55,7 +55,7 @@ jobs:
           cd openssl
           perl Configure darwin64-x86_64
           make -j8
-          make install
+          sudo make install
           npm -g install appdmg
       - name: Build
         run: |
