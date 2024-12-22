@@ -7,8 +7,8 @@ on:
      # - cron: '15 21 * * *'
 jobs:
   build:
-    #runs-on: ${{ matrix.os }}
-    runs-on: self-hosted
+    runs-on: ${{ matrix.os }}
+    #runs-on: self-hosted
     strategy:
       matrix:
         os: [macOS-latest]
@@ -48,7 +48,7 @@ jobs:
         
         with:
           version: 5.15.2
-          setup-python: python3.12
+          setup-python: python3
           modules: qtwebengine qtwebglplugin
      
             
