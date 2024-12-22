@@ -47,8 +47,8 @@ jobs:
         uses: jurplel/install-qt-action@v4
         
         with:
+          setup-python: python3.12
           version: 5.15.2
-          setup-python: false
           modules: qtwebengine qtwebglplugin
      
             
