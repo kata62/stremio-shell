@@ -43,16 +43,13 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
       
       - name: Install Qt
-        
-      
-          
+                   
         uses: jurplel/install-qt-action@v4
+        
         with:
-          python-version: '3.12'
-          architecture: 'x64'   
           version: 5.15.2
           #python-version: 3.13
-          #setup.python: python3
+          setup.python: python3.12
           modules: qtwebengine qtwebglplugin
      
             
