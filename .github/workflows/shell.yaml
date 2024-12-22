@@ -46,21 +46,16 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: 5.15.2
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          architecture: 'x64'
           #python-version: 3.13
           #setup.python: python3
           modules: qtwebengine qtwebglplugin
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-         python-version: '3.12'
-         architecture: 'x64'
-
-      - name: Install python packages
-    
-        working-directory: ${{runner.workspace}}
-        run:
-          pip3 install dmgbuild
-
+     
+            
       - name: Dependencies
         run: |
           brew update-reset
