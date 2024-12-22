@@ -48,8 +48,7 @@ jobs:
         
         with:
           version: 5.15.2
-          #python-version: 3.13
-          setup.python: python3.12
+          setup.python: false
           modules: qtwebengine qtwebglplugin
      
             
