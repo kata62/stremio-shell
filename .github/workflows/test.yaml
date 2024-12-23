@@ -44,8 +44,8 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          setup-python: pythom3.0.0
-          version: 5.15.2
+          # setup-python: false
+          version: 5.15.2 
           modules: qtwebengine qtwebglplugin
          
           #setup-python: python3.11
