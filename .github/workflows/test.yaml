@@ -43,11 +43,13 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
+      - uses: actions/setup-python@v4
         with:
+           version: 5.15.2
+           modules: qtwebengine qtwebglplugin
           # setup-python: false
-          version: 5.15.2
-          setup-python: python3.11
-          modules: qtwebengine qtwebglplugin
+          # setup-python: python3.11
+        
 
 
       - name: Dependencies
