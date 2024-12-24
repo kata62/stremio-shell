@@ -11,8 +11,8 @@ jobs:
     #runs-on: self-hosted
     strategy:
       matrix:
-        os: [ macOS-latest]
-        node: ['20']
+        os: [ macOS-13]
+        #node: ['20']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
       CERT_PASS: ${{ secrets.CERT_PASS }}
@@ -24,7 +24,7 @@ jobs:
       #  with:
       #    xcode-version: '11.5'
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
   
       # - uses: actions/setup-node@v1
       #   with:
@@ -42,10 +42,10 @@ jobs:
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
          # if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4
         with:
-          uses: actions/setup-python@v4
-          python-version: '3.12'
+          #uses: actions/setup-python@v4
+          #python-version: '3.12'
           #setup-python: false
           version: 5.15.2 
           modules: qtwebengine qtwebglplugin
