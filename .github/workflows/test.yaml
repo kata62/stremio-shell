@@ -11,7 +11,7 @@ jobs:
     #runs-on: self-hosted
     strategy:
       matrix:
-        os: [ macOS-latest]
+        os: [ macOS-13]
         #node: ['20']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -42,7 +42,7 @@ jobs:
           echo DMG_PATH=$DMG_PATH >> $GITHUB_ENV
          # if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then echo DEPLOY=false >> $GITHUB_ENV; else echo DEPLOY=true >> $GITHUB_ENV; fi
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           #uses: actions/setup-python@v4
           #python-version: '3.12'
