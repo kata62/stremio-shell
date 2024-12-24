@@ -11,7 +11,7 @@ jobs:
     #runs-on: self-hosted
     strategy:
       matrix:
-        os: [ macOS-13]
+        os: [ macOS-latest]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -44,7 +44,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          # setup-python: false
+          setup-python: python3.12
           version: 5.15.2 
           modules: qtwebengine qtwebglplugin
          
