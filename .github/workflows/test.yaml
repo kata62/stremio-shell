@@ -44,7 +44,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          uses: actions/setup-python@v3
+          uses: actions/setup-python@v4
           python-version: 3.12
           #setup-python: false
           version: 5.15.2 
