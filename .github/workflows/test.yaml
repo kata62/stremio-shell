@@ -51,7 +51,7 @@ jobs:
           #setup-python: false
           version: 5.15.2 
           modules: qtwebengine qtwebglplugin
-          arch: x86_64
+         
          
           #setup-python: python3.11
         
