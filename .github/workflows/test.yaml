@@ -68,7 +68,7 @@ jobs:
          # git clone https://github.com/iina/iina
           # bash ./iina/other/download_libs.sh
           brew tap iina/homebrew-mpv-iina
-          #brew install mpv-iina
+          brew install mpv-iina
           export MPV_BIN_PATH=$(pwd)/deps
           (cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
           export OPENSSL_BIN_PATH=$(brew --prefix openssl)
