@@ -11,7 +11,7 @@ jobs:
     #runs-on: self-hosted
     strategy:
       matrix:
-        os: [ macos-13]
+        os: [ macos-latest]
         #node: ['20']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -65,7 +65,8 @@ jobs:
           npm -g install appdmg
       - name: Build
         run: |
-          git clone -b v1.3.5 https://github.com/iina/iina
+          #git clone -b v1.3.5 https://github.com/iina/iina
+          https://github.com/kata62/iina.git
           bash ./iina/other/download_libs.sh
           
           export MPV_BIN_PATH=$(pwd)/deps
