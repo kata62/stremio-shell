@@ -11,7 +11,7 @@ jobs:
     #runs-on: self-hosted
     strategy:
       matrix:
-        os: [macOS-latest]
+        os: [macOS-13]
       #  node: ['8']
     env:
       APP_IDENTITY: "FA18F75D76A5D513F8465C671CD0FE2F7F9AA848"
@@ -88,7 +88,7 @@ jobs:
           
       - name: Fix dependencies
         run: | 
-          cp ./deps/lib/* ./build/stremio.app/Contents/Frameworks || echo "No deps/lib directory"
+          cp ./deps/lib/* ./build/stremio.app/Contents/Frameworks 
           cp ./mac/libcrypto.3.dylib ./build/stremio.app/Contents/Frameworks
       - name: Testdrive
         run: ( $DEST_DIR/stremio & sleep 10 && STREMIO_PID=$! && kill $STREMIO_PID )
