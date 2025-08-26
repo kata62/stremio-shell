@@ -1,6 +1,6 @@
 #!/bin/bash
 
-location="https://iina.io/dylibs/x86_64"
+location="https://iina.io/dylibs/arm64"
 IFS=$'\n' read -r -d '' -a files < <(curl "${location}/filelist.txt" && printf '\0')
 mkdir -p deps/lib
 for file in "${files[@]}"
