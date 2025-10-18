@@ -96,13 +96,7 @@ jobs:
       - name: Rename the app
         run: mv ./build/stremio.app ./Stremio.app
 
-      - name: Setup keychain
-        run: if [ "$DEPLOY" = "true" ]; then source ./mac/keychain_profile; fi
-
-      - name: Sign App
-        run: |
-          if [ "$DEPLOY" = "true" ]; then codesign --deep --force -v -s $APP_IDENTITY --entitlements ./mac/entitlements.plist --options runtime ./Stremio.app; fi
-
+      
       #- name: Notarizing
         # env:
           #NOTARIZATION_PWD: ${{ secrets.NOTARIZATION_PWD }}
