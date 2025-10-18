@@ -17,7 +17,7 @@ jobs:
       CERT_PASS: ${{ secrets.CERT_PASS }}
       DEST_DIR: ./build/stremio.app/Contents/MacOS
       TAG: master
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+     # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       #- uses: maxim-lobanov/setup-xcode@v1.1
       #  with:
@@ -103,12 +103,12 @@ jobs:
         run: |
           if [ "$DEPLOY" = "true" ]; then codesign --deep --force -v -s $APP_IDENTITY --entitlements ./mac/entitlements.plist --options runtime ./Stremio.app; fi
 
-      - name: Notarizing
-        env:
-          NOTARIZATION_PWD: ${{ secrets.NOTARIZATION_PWD }}
-          TEAM_ID: ${{ secrets.TEAM_ID }}
-        run: |
-          if [ "$DEPLOY" = "true" ]; then ./mac/notarizer.sh Stremio.app "ivo@linvo.com" "$NOTARIZATION_PWD" "$TEAM_ID"; fi
+      #- name: Notarizing
+        # env:
+          #NOTARIZATION_PWD: ${{ secrets.NOTARIZATION_PWD }}
+           #TEAM_ID: ${{ secrets.TEAM_ID }}
+        #run: |
+         # if [ "$DEPLOY" = "true" ]; then ./mac/notarizer.sh Stremio.app "ivo@linvo.com" "$NOTARIZATION_PWD" "$TEAM_ID"; fi
 
       - name: Pack
         run: |
@@ -126,26 +126,6 @@ jobs:
           name: StremioDMG
           path: "${{ env.DMG_PATH }}"
 
-      - name: Upload to AWS
-        shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: AKIAJWBFLU34IVITPLHA
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
-          AWS_DEFAULT_REGION: eu-west-1
-        run: |
-          pip3 install s3cmd
-           if [ "$DEPLOY" = "true" ]; then s3cmd --acl-public --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --force --region=$AWS_DEFAULT_REGION put "$DMG_PATH" s3://stremio-artifacts/shell-osx/$CURRENT_BRANCH/ ; fi
-
-  slackNotification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Slack channel
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_USERNAME: Github Action
-          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2020-10-19/1422366829703_48.png
-          SLACK_TITLE: Github Builds - Shell
-          SLACK_CHANNEL: '#installer-ci'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+   
+ 
         if: ${{ !github.event.pull_request }}
