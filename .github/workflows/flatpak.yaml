@@ -45,27 +45,11 @@ jobs:
           mv Stremio.flatpak "$FLATPAK_PATH"
 
       - name: Store the Flatpak
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: StremioFlatpak
           path: ${{ env.FLATPAK_PATH }}
 
-      - name: Upload to AWS
-        shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: AKIAJWBFLU34IVITPLHA
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
-          AWS_DEFAULT_REGION: eu-west-1
-        run: |
-          sudo pip3 install s3cmd
-          if [ "$DEPLOY" = "true" ]; then s3cmd --acl-public --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --force --region=$AWS_DEFAULT_REGION put "$FLATPAK_PATH" s3://stremio-artifacts/shell-linux/$CURRENT_BRANCH/; fi
-
-      - name: Notify Slack channel
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_USERNAME: Github Action
-          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2020-10-19/1422366829703_48.png
-          SLACK_TITLE: Github Builds - Flatpak
-          SLACK_CHANNEL: '#installer-ci'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      
         if: ${{ !github.event.pull_request }}
