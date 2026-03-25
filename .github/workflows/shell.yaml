@@ -57,6 +57,7 @@ jobs:
         run: |
           git clone https://github.com/iina/iina
           sed -i '' 's/ARCH="universal"/ARCH="x86_64"/g' ./iina/other/download_libs.sh
+          sed -i '' 's|DYLIBS_DOWNLOAD_PATH="https://iina.io/dylibs/${ARCH}"|DYLIBS_DOWNLOAD_PATH="https://iina.io/dylibs/1.3.2/${ARCH}"|' ./iina/other/download_libs.sh
           bash ./iina/other/download_libs.sh
           export MPV_BIN_PATH=$(pwd)/iina/deps
           ( cd $MPV_BIN_PATH/lib && ln -s libmpv.2.dylib libmpv.dylib )
