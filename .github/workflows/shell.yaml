@@ -2,7 +2,7 @@ name: Shell
 
 on:
   push:
-  pull_request3:
+  pull_request:
  # schedule:
   #  - cron: '15 21 * * *'
 jobs:
