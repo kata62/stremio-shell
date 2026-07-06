@@ -55,6 +55,7 @@ jobs:
 
       - name: Build
         run: |
+          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://github.com
           git clone https://github.com/iina/iina
           sed -i '' 's/ARCH="universal"/ARCH="x86_64"/g' ./iina/other/download_libs.sh
           sed -i '' 's|DYLIBS_DOWNLOAD_PATH="https://iina.io/dylibs/${ARCH}"|DYLIBS_DOWNLOAD_PATH="https://iina.io/dylibs/1.3.2/${ARCH}"|' ./iina/other/download_libs.sh
