@@ -59,6 +59,8 @@ jobs:
           npm -g install appdmg
 
       - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Inject the automatic GitHub rate-limit token
         run: |
           git clone https://github.com/iina/iina
           sed -i '' 's/ARCH="universal"/ARCH="x86_64"/g' ./iina/other/download_libs.sh
